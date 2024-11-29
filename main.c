@@ -1,27 +1,15 @@
-//#include <netinet/in.h>
+#include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <sys/socket.h>
+#include <sys/socket.h>
 #include <unistd.h>
-
-#include <winsock2.h>
-#include <ws2tcpip.h>
-
+#include <arpa/inet.h>
 
 #define PORT 8080
 
 
 int main(){
-    // Initialize Winsock
-    WSADATA wsaData;
-    int wsResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-    if (wsResult != 0) {
-        printf("WSAStartup failed with error %d\n", wsResult);
-        return 1;
-    }
-
-
 
     //this sockect() return a file descriptor
     int socketfd = socket(AF_INET,SOCK_STREAM, 0);
@@ -47,7 +35,7 @@ int main(){
  
     //this connect function conncets our socket to a port (maybe)
     //returns a result
-    int result = connect(socketfd, &address, sizeof address);
+    int result = connect(socketfd, (struct sockaddr *)&address, sizeof address);
     
     //checking if connection was successfull
     if(result == 0){
@@ -57,11 +45,14 @@ int main(){
     }
 
 
+    //now the connection is sucessful we need to send a http request with send()
 
+    char *message;
+    message = "GET \\ HTTP/1.1\r\nHost:google.com\r\n\r\n";
+    send(socketfd, message, strlen(message), 0);
 
+    char buffer[1024];
+    recv(socketfd, buffer , 1024, 0);
 
-    // Cleanup
-    closesocket(socketfd);
-    WSACleanup();
-    return 0;
+    printf("response was %s\n", buffer);
 }

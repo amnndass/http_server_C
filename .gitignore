@@ -4,3 +4,9 @@ noTheme:
 --settings.json
 
 .vscode/
+
+*.o
+*.out
+*.exe
+*.a
+*.so
