@@ -2,3 +2,5 @@ noTheme:
 -projectDir
 -.vscode
 --settings.json
+
+.vscode/
