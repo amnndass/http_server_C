@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <stdbool.h>
 
 #define PORT 8080
 
@@ -42,18 +43,47 @@ int main(){
     if(result == 0){
         printf("connection was successfull\n");
     }else{
-        printf("connection failed");
+        printf("connection failed\n");
     }
 
 
     //now the connection is sucessful we need to send a http request with send()
 
-    char *message;
-    message = "GET \\ HTTP/1.1\r\nHost:google.com\r\n\r\n";
-    send(socketfd, message, strlen(message), 0);
 
-    char buffer[1024];
-    recv(socketfd, buffer , 1024, 0);
+    //messaging functionality
+    char *line = NULL;
+    size_t lineSize = 0;
 
-    printf("response was %s\n", buffer);
+    printf("type and we will send\n");
+
+    while(true){
+        size_t charCount = getline(&line, &lineSize, stdin);
+
+        if(charCount > 0){
+            if(strcmp(line, "exit\n") == 0){
+                break;
+            }else{
+                ssize_t amountWasSent = send(socketfd, line, lineSize, 0);
+            }
+        }
+
+    }
+
+
+
+
+
+
+    //http request message
+    //message = "GET \\ HTTP/1.1\r\nHost:google.com\r\n\r\n";
+
+    //custom message
+    // message = "GET /status HTTP/1.1\r\nHost: 139.59.49.217\r\nAuthorization: Bearer your-token-here\r\nConnection: close\r\n\r\n";
+
+    // send(socketfd, message, strlen(message), 0);
+
+    // char buffer[1024];
+    // recv(socketfd, buffer , 1024, 0);
+
+    // printf("response was \n%s", buffer);
 }

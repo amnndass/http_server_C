@@ -23,10 +23,13 @@ struct sockaddr_in* createIPv4address(char *ip,int port ){
 }
  
 int main(){
+    //making socket and getting the file descreptor for serverSocket
     int serverSockedfd = socket(AF_INET, SOCK_STREAM, 0);
 
+    //making a socketAddress haddled by a function
     struct sockaddr_in *serverAddress = createIPv4address("", 2000);
 
+    //binding our server to the socket
     int result = bind(serverSockedfd, (struct sockaddr *)serverAddress, sizeof(*serverAddress));
 
     if(result == 0){
