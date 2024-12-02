@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <stdbool.h>
 
 #define PORT 8080
 
@@ -45,8 +46,24 @@ int main(){
     int clientSocketFD = accept(serverSockedfd,(struct sockaddr *)&clientAddress, &clientAddressSize);
 
     char buffer[1024];
-    recv(clientSocketFD, buffer , 1024, 0);
+    
 
     printf("response was %s\n", buffer);
+
+    while(true){
+        ssize_t amountRecived = recv(clientSocketFD, buffer , 1024, 0);
+
+        if(amountRecived > 0){
+            buffer[amountRecived] = 0;
+            printf("response was %s\n", buffer);
+        }
+
+        if(amountRecived == 0){
+            break;
+        }
+    }
+
+    close(clientSocketFD);
+    shutdown(serverSockedfd, SHUT_RDWR);
 
 }

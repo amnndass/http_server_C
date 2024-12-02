@@ -69,6 +69,8 @@ int main(){
 
     }
 
+    close(socketfd);
+
 
 
 
