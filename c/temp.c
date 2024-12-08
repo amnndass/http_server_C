@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+
+
 int main(){
 /*
     int a = 10;
@@ -45,12 +47,18 @@ int main(){
 
 
 
-    //array
-    int arr[5] = {1,2,3,4,5};
+    // //array
+    // int arr[5] = {1,2,3,4,5};
 
-    int *ptr = &arr[0];
-    printf("\n\n%d\n", *ptr);
+    // int *ptr = &arr[0];
+    // printf("\n\n%d\n", *ptr);
 
+    // int a = 1 ;
+    // int b = 2;
+    //test(a, b);
+
+    char buffer[1024];
+    printf("something-> %s\n", buffer);
 
 
 }

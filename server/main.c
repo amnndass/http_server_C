@@ -45,8 +45,9 @@ int main(){
     int clientAddressSize = sizeof (struct sockaddr_in);
     int clientSocketFD = accept(serverSockedfd,(struct sockaddr *)&clientAddress, &clientAddressSize);
 
+
+
     char buffer[1024];
-    
 
     printf("response was %s\n", buffer);
 
@@ -61,6 +62,8 @@ int main(){
         if(amountRecived == 0){
             break;
         }
+
+        sendHtmlResponse(clientSocketFD);
     }
 
     close(clientSocketFD);
