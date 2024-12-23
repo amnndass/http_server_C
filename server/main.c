@@ -7,7 +7,7 @@
 #include <arpa/inet.h>
 #include <stdbool.h>
 
-#define PORT 8080
+//#define PORT 8080
 
 struct sockaddr_in* createIPv4address(char *ip,int port ){
     struct sockaddr_in *address = malloc(sizeof(struct sockaddr_in));
@@ -22,7 +22,34 @@ struct sockaddr_in* createIPv4address(char *ip,int port ){
 
     return address;
 }
- 
+
+
+void sendHtmlResponse(int clientSocketFD) {
+    const char *responseBody = 
+        "<!DOCTYPE html>\r\n"
+        "<html lang=\"en\">\r\n"
+        "<head><meta charset=\"UTF-8\"><title>Welcome</title></head>\r\n"
+        "<body><h1>Hello, welcome to my page!</h1></body>\r\n"
+        "</html>\r\n";
+    
+    // Calculate the content length dynamically
+    int contentLength = strlen(responseBody);
+
+    char response[1024];
+    snprintf(response, sizeof(response),
+        "HTTP/1.1 200 OK\r\n"
+        "Content-Type: text/html; charset=UTF-8\r\n"
+        "Content-Length: %d\r\n"
+        "Connection: close\r\n"
+        "\r\n", contentLength);
+
+    // Send the headers
+    send(clientSocketFD, response, strlen(response), 0);
+    // Send the body of the response
+    send(clientSocketFD, responseBody, contentLength, 0);
+}
+
+
 int main(){
     //making socket and getting the file descreptor for serverSocket
     int serverSockedfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -57,13 +84,15 @@ int main(){
         if(amountRecived > 0){
             buffer[amountRecived] = 0;
             printf("response was %s\n", buffer);
+            sendHtmlResponse(clientSocketFD);
+            break;
         }
 
         if(amountRecived == 0){
             break;
         }
 
-        sendHtmlResponse(clientSocketFD);
+        //sendHtmlResponse(clientSocketFD);
     }
 
     close(clientSocketFD);
